@@ -267,20 +267,13 @@
     </div>
   </section>
 
-  <footer class="footer py-4">
-    <div class="container d-flex justify-content-between">
-      <small>© <span id="y"></span> 洪嘉胤</small>
-      <small>Made with 嘉成</small>
-    </div>
-  </footer>
-
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- ===== Firebase 前端：匿名登入 + Firestore 寫入 contact_us ===== -->
+  <!-- 🔥 Firebase 表單寫入 contact_us -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -297,38 +290,43 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // 匿名登入（供規則驗證）
-    await signInAnonymously(auth).catch(err => console.error("匿名登入失敗", err));
-
-    // 表單送出
     const form = document.getElementById('contactForm');
-    const tip  = document.getElementById('formMsg');
+    const tip = document.getElementById('formMsg');
 
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      tip.textContent = "送出中…";
+    // 先登入匿名帳號
+    signInAnonymously(auth).catch(e => console.error("匿名登入失敗", e));
 
-      const fd = new FormData(form);
-      if ((fd.get('website') || '').trim() !== '') {
-        tip.textContent = "已送出。";
-        form.reset();
-        return;
-      }
+    // 確認登入後才能送出表單
+    onAuthStateChanged(auth, (user) => {
+      if (!user) return;
 
-      try {
-        await addDoc(collection(db, 'contact_us'), {
-          name: fd.get('name'),
-          email: fd.get('email'),
-          message: fd.get('message'),
-          createdAt: serverTimestamp(),
-          userAgent: navigator.userAgent
-        });
-        tip.textContent = "✅ 已成功送出，感謝！";
-        form.reset();
-      } catch (err) {
-        console.error(err);
-        tip.textContent = "❌ 送出失敗，請稍後再試或改用右側 Gmail 按鈕。";
-      }
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        tip.textContent = "送出中…";
+
+        const fd = new FormData(form);
+        if ((fd.get('website') || '').trim() !== '') {
+          tip.textContent = "✅ 已送出。";
+          form.reset();
+          return;
+        }
+
+        try {
+          await addDoc(collection(db, "contact_us"), {
+            name: fd.get("name"),
+            email: fd.get("email"),
+            message: fd.get("message"),
+            createdAt: serverTimestamp(),
+            userAgent: navigator.userAgent
+          });
+
+          tip.textContent = "✅ 已成功送出，感謝！";
+          form.reset();
+        } catch (err) {
+          console.error(err);
+          tip.textContent = "❌ 送出失敗，請稍後再試。";
+        }
+      });
     });
   </script>
 </body>
