@@ -8,13 +8,20 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root{
-  --bg:#0f141a; 
-  --ink:#f3f6fa;         /* 主文字變亮 */
-  --muted:#d0d6e0;       /* 副文字稍微亮一點 */
-  --card:#1b232f;        /* 卡片略亮一階 */
-  --line:#303a48;        /* 邊框線亮一點 */
-  --acc:#81c8ff;         /* 藍色重一點 */
+  --bg:#ffffff;        /* 背景改白色 */
+  --ink:#000000;       /* 主文字黑色 */
+  --muted:#333333;     /* 副文字深灰 */
+  --card:#f5f5f5;      /* 卡片底淺灰 */
+  --line:#dddddd;      /* 邊框線灰色 */
+  --acc:#0055ff;       /* 重點藍色 */
 }
+body{background:var(--bg); color:var(--ink);}
+.navbar{background:rgba(255,255,255,.85)!important; border-bottom:1px solid var(--line);}
+.card{background:var(--card); border:1px solid var(--line);}
+a{color:var(--acc);}
+.text-white-50{color:#444!important;}
+h2, h3, .h4, .h5{color:#000!important;}
+
     body{background:var(--bg); color:var(--ink); font-family: system-ui, -apple-system, "Noto Sans TC", "Segoe UI", Roboto;}
     a{color:var(--acc)}
     .navbar{background:rgba(15,20,26,.7)!important; backdrop-filter: blur(8px)}
