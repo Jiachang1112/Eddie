@@ -271,63 +271,70 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- 🔥 Firebase 表單寫入 contact_us -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDu5dJ1-UQvQv_Xn_09hiibd5FD1YI6CTQ",
-      authDomain: "eddie-89bdb.firebaseapp.com",
-      projectId: "eddie-89bdb",
-      storageBucket: "eddie-89bdb.appspot.com",
-      messagingSenderId: "793307601545",
-      appId: "1:793307601545:web:d511e53555a69e9a834458",
-      measurementId: "G-QK8T5YTELW"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyDu5dJ1-UQvQv_Xn_09hiibd5FD1YI6CTQ",
+    authDomain: "eddie-89bdb.firebaseapp.com",
+    projectId: "eddie-89bdb",
+    storageBucket: "eddie-89bdb.appspot.com",
+    messagingSenderId: "793307601545",
+    appId: "1:793307601545:web:d511e53555a69e9a834458",
+    measurementId: "G-QK8T5YTELW"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const form = document.getElementById('contactForm');
-    const tip = document.getElementById('formMsg');
+  const form = document.getElementById('contactForm');
+  const tip  = document.getElementById('formMsg');
 
-    // 先登入匿名帳號
-    signInAnonymously(auth).catch(e => console.error("匿名登入失敗", e));
+  // 先嘗試背景登入（不阻塞頁面）
+  signInAnonymously(auth).catch(err => console.warn('匿名登入失敗(背景)', err));
 
-    // 確認登入後才能送出表單
-    onAuthStateChanged(auth, (user) => {
-      if (!user) return;
+  // ★ 一開始就綁 submit，確保一定 preventDefault，不會整頁重整
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    tip.textContent = '送出中…';
 
-      form?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        tip.textContent = "送出中…";
+    try {
+      // 確保已登入；若尚未登入，這裡補一次並等待
+      if (!auth.currentUser) {
+        await signInAnonymously(auth);
+      }
 
-        const fd = new FormData(form);
-        if ((fd.get('website') || '').trim() !== '') {
-          tip.textContent = "✅ 已送出。";
-          form.reset();
-          return;
-        }
+      const fd = new FormData(form);
+      // 反機器人欄位
+      if ((fd.get('website') || '').trim() !== '') {
+        tip.textContent = '已送出。';
+        form.reset();
+        return;
+      }
 
-        try {
-          await addDoc(collection(db, "contact_us"), {
-            name: fd.get("name"),
-            email: fd.get("email"),
-            message: fd.get("message"),
-            createdAt: serverTimestamp(),
-            userAgent: navigator.userAgent
-          });
-
-          tip.textContent = "✅ 已成功送出，感謝！";
-          form.reset();
-        } catch (err) {
-          console.error(err);
-          tip.textContent = "❌ 送出失敗，請稍後再試。";
-        }
+      await addDoc(collection(db, 'contact_us'), {
+        name: fd.get('name'),
+        email: fd.get('email'),
+        message: fd.get('message'),
+        createdAt: serverTimestamp(),
+        userAgent: navigator.userAgent
       });
-    });
-  </script>
+
+      tip.textContent = '✅ 已成功送出，感謝！';
+      form.reset();
+    } catch (err) {
+      console.error('提交失敗：', err);
+      // 顯示更明確的錯誤，幫助你排查
+      if (String(err).includes('permission') || String(err.code).includes('permission')) {
+        tip.textContent = '❌ 權限被拒。請確認 Firestore 規則已「發佈」且 Anonymous 已啟用。';
+      } else {
+        tip.textContent = '❌ 送出失敗，請稍後再試或改用右側 Gmail 按鈕。';
+      }
+    }
+  });
+</script>
 </body>
 </html>
