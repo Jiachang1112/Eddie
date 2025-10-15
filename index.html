@@ -101,6 +101,14 @@
     @keyframes toast-out{
       to  { opacity:0; transform: translateX(-50%) translateY(20px) scale(.98); }
     }
+
+    /* Confetti 畫布不阻擋點擊 */
+    #confettiCanvas{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1079;
+    }
   </style>
 
   <!-- 結構化資料 -->
@@ -306,6 +314,9 @@
     ✅ 已成功送出，感謝！
   </div>
 
+  <!-- Confetti 畫布 -->
+  <canvas id="confettiCanvas"></canvas>
+
   <footer class="footer py-4">
     <div class="container d-flex justify-content-between">
       <small>© <span id="y"></span> 洪嘉胤</small>
@@ -318,18 +329,94 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Formspree: 非同步送出＋金色動畫提示 -->
+  <!-- Formspree: 非同步送出＋金色動畫提示＋Confetti -->
   <script>
-    const form  = document.getElementById("contactForm");
-    const msg   = document.getElementById("formMsg");
-    const toast = document.getElementById("successToast");
+    const form   = document.getElementById("contactForm");
+    const msg    = document.getElementById("formMsg");
+    const toast  = document.getElementById("successToast");
+    const canvas = document.getElementById("confettiCanvas");
+    const ctx    = canvas.getContext("2d");
 
+    // ------------ Confetti ------------
+    function resizeCanvas(){
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+
+    function launchConfetti(durationMs = 1600, count = 140){
+      const particles = [];
+      const colors = ["#f9c65c","#ffd56a","#fff0b3","#ffffff"]; // 金色系＋白
+      const gravity = 0.22;
+      const drag = 0.992;
+
+      for(let i=0;i<count;i++){
+        const angle = (Math.random()*Math.PI) - Math.PI/2; // 從上方左右噴出
+        const speed = 6 + Math.random()*6;
+        particles.push({
+          x: canvas.width/2 + (Math.random()*120-60),
+          y: -20 + Math.random()*40,
+          vx: Math.cos(angle)*speed,
+          vy: Math.sin(angle)*speed + 6,
+          size: 4 + Math.random()*6,
+          rot: Math.random()*Math.PI,
+          vr: (Math.random()-.5)*0.2,
+          color: colors[(Math.random()*colors.length)|0],
+          shape: Math.random() < 0.5 ? "rect" : "circle",
+          life: 0
+        });
+      }
+
+      const start = performance.now();
+      function tick(now){
+        const elapsed = now - start;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        particles.forEach(p=>{
+          p.vx *= drag;
+          p.vy = p.vy*drag + gravity;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.life += 16;
+
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          if(p.shape==="rect"){
+            ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+          }else{
+            ctx.beginPath();
+            ctx.arc(0,0,p.size*0.5,0,Math.PI*2);
+            ctx.fill();
+          }
+          ctx.restore();
+        });
+
+        // 移除超出畫面或壽命過長的
+        for(let i=particles.length-1;i>=0;i--){
+          const p=particles[i];
+          if(p.y>canvas.height+40 || p.x<-40 || p.x>canvas.width+40) particles.splice(i,1);
+        }
+
+        if(elapsed < durationMs && particles.length){
+          requestAnimationFrame(tick);
+        }else{
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ------------ 成功提示 Toast ------------
     function showSuccessToast(){
       toast.classList.remove('show');
       void toast.offsetWidth;      // 重新計算以重播動畫
       toast.classList.add('show');
     }
 
+    // ------------ 表單送出 ------------
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       msg.textContent = "送出中…";
@@ -343,7 +430,8 @@
 
         if (res.ok) {
           msg.textContent = "";      // 清掉下方提示
-          showSuccessToast();        // 金色動畫
+          showSuccessToast();        // 金色提示
+          launchConfetti();          // ✨ 金色 confetti
           form.reset();
         } else {
           msg.textContent = "❌ 送出失敗，請稍後再試。";
