@@ -160,59 +160,59 @@
   <section id="awards" class="section">
     <div class="container">
       <h2 class="h4 mb-4">比賽經歷</h2>
-      <ul class="timeline">
-        <li>
-          <span class="dot"></span>
-          <h3 class="h6 mb-1">2023 年 11 月 09 日（四）</h3>
-          <div class="card p-3">
-            <div class="d-flex flex-wrap gap-2 mb-1">
-              <span class="badge badge-soft">112 學年度音樂比賽</span>
-              <span class="badge bg-success">特優第一名</span>
-            </div>
-            <p class="mb-1">市賽・團體組・國小組</p>
-            <small class="text-white-50">地點：—</small>
+    <ul class="timeline">
+      <li>
+        <span class="dot"></span>
+        <h3 class="h6 mb-1">2023 年 11 月 09 日（四）</h3>
+        <div class="card p-3">
+          <div class="d-flex flex-wrap gap-2 mb-1">
+            <span class="badge badge-soft">112 學年度音樂比賽</span>
+            <span class="badge bg-success">特優第一名</span>
           </div>
-        </li>
+          <p class="mb-1">市賽・團體組・國小組</p>
+          <small class="text-white-50">地點：—</small>
+        </div>
+      </li>
 
-        <li>
-          <span class="dot"></span>
-          <h3 class="h6 mb-1">2022 年 11 月 23 日</h3>
-          <div class="card p-3">
-            <div class="d-flex flex-wrap gap-2 mb-1">
-              <span class="badge badge-soft">111 學年度全國學生音樂比賽</span>
-              <span class="badge bg-success">優等第一名</span>
-              <span class="badge bg-info">晉級全國賽</span>
-            </div>
-            <p class="mb-2">高雄市初賽｜揚琴獨奏</p>
-            <p class="mb-1">指定曲：新開板　｜　自選曲：雲端</p>
-            <small class="text-white-50">指導：陳昱仁 老師　｜　鋼琴伴奏：田佳玉 老師</small>
+      <li>
+        <span class="dot"></span>
+        <h3 class="h6 mb-1">2022 年 11 月 23 日</h3>
+        <div class="card p-3">
+          <div class="d-flex flex-wrap gap-2 mb-1">
+            <span class="badge badge-soft">111 學年度全國學生音樂比賽</span>
+            <span class="badge bg-success">優等第一名</span>
+            <span class="badge bg-info">晉級全國賽</span>
           </div>
-        </li>
+          <p class="mb-2">高雄市初賽｜揚琴獨奏</p>
+          <p class="mb-1">指定曲：新開板　｜　自選曲：雲端</p>
+          <small class="text-white-50">指導：陳昱仁 老師　｜　鋼琴伴奏：田佳玉 老師</small>
+        </div>
+      </li>
 
-        <li>
-          <span class="dot"></span>
-          <h3 class="h6 mb-1">2021 年 08 月 22 日</h3>
-          <div class="card p-3">
-            <div class="d-flex flex-wrap gap-2 mb-1">
-              <span class="badge badge-soft">衛武營全國音樂大賽</span>
-              <span class="badge bg-success">第一名</span>
-            </div>
-            <p class="mb-0">個人競賽</p>
+      <li>
+        <span class="dot"></span>
+        <h3 class="h6 mb-1">2021 年 08 月 22 日</h3>
+        <div class="card p-3">
+          <div class="d-flex flex-wrap gap-2 mb-1">
+            <span class="badge badge-soft">衛武營全國音樂大賽</span>
+            <span class="badge bg-success">第一名</span>
           </div>
-        </li>
+          <p class="mb-0">個人競賽</p>
+        </div>
+      </li>
 
-        <li>
-          <span class="dot"></span>
-          <h3 class="h6 mb-1">2021 年 08 月 22 日</h3>
-          <div class="card p-3">
-            <div class="d-flex flex-wrap gap-2 mb-1">
-              <span class="badge badge-soft">衛武營比賽</span>
-              <span class="badge bg-success">第一名</span>
-            </div>
-            <p class="mb-0">（若與上方同一活動，可合併成一筆紀錄）</p>
+      <li>
+        <span class="dot"></span>
+        <h3 class="h6 mb-1">2021 年 08 月 22 日</h3>
+        <div class="card p-3">
+          <div class="d-flex flex-wrap gap-2 mb-1">
+            <span class="badge badge-soft">衛武營比賽</span>
+            <span class="badge bg-success">第一名</span>
           </div>
-        </li>
-      </ul>
+          <p class="mb-0">（若與上方同一活動，可合併成一筆紀錄）</p>
+        </div>
+      </li>
+    </ul>
     </div>
   </section>
 
@@ -229,7 +229,7 @@
     </div>
   </section>
 
-  <!-- CONTACT (with Firebase form) -->
+  <!-- CONTACT (Formspree) -->
   <section id="contact" class="section">
     <div class="container">
       <div class="card p-4">
@@ -237,14 +237,14 @@
         <p class="text-white-50 mb-3">演出與合作邀約，請填下方表單。</p>
 
         <form
-  id="contactForm"
-  class="row g-3"
-  action="https://formspree.io/f/https://formspree.io/f/mnnglpva
-  method="POST"
->
-
-          <!-- 隱藏反機器人欄位 -->
-          <input type="text" name="website" style="display:none">
+          id="contactForm"
+          class="row g-3"
+          action="https://formspree.io/f/mnnglpva"
+          method="POST"
+        >
+          <!-- 防機器人（Formspree 也支援 _gotcha；二選一即可） -->
+          <input type="text" name="_gotcha" style="display:none">
+          <input type="hidden" name="_subject" value="網站聯絡表單（洪嘉胤）">
 
           <div class="col-md-6">
             <label class="form-label">姓名</label>
@@ -273,74 +273,44 @@
     </div>
   </section>
 
-   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <footer class="footer py-4">
+    <div class="container d-flex justify-content-between">
+      <small>© <span id="y"></span> 洪嘉胤</small>
+      <small>Made with 嘉成</small>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- 🔥 Firebase 表單寫入 contact_us -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <!-- Formspree: 非同步送出＋狀態提示 -->
+  <script>
+    const form = document.getElementById("contactForm");
+    const msg  = document.getElementById("formMsg");
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDu5dJ1-UQvQv_Xn_09hiibd5FD1YI6CTQ",
-    authDomain: "eddie-89bdb.firebaseapp.com",
-    projectId: "eddie-89bdb",
-    storageBucket: "eddie-89bdb.appspot.com",
-    messagingSenderId: "793307601545",
-    appId: "1:793307601545:web:d511e53555a69e9a834458",
-    measurementId: "G-QK8T5YTELW"
-  };
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msg.textContent = "送出中…";
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
 
-  const form = document.getElementById('contactForm');
-  const tip  = document.getElementById('formMsg');
-
-  // 先嘗試背景登入（不阻塞頁面）
-  signInAnonymously(auth).catch(err => console.warn('匿名登入失敗(背景)', err));
-
-  // ★ 一開始就綁 submit，確保一定 preventDefault，不會整頁重整
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    tip.textContent = '送出中…';
-
-    try {
-      // 確保已登入；若尚未登入，這裡補一次並等待
-      if (!auth.currentUser) {
-        await signInAnonymously(auth);
+        if (res.ok) {
+          msg.textContent = "✅ 已成功送出，感謝！";
+          form.reset();
+        } else {
+          msg.textContent = "❌ 送出失敗，請稍後再試。";
+        }
+      } catch (err) {
+        msg.textContent = "⚠️ 無法連線，請稍後再試。";
       }
-
-      const fd = new FormData(form);
-      // 反機器人欄位
-      if ((fd.get('website') || '').trim() !== '') {
-        tip.textContent = '已送出。';
-        form.reset();
-        return;
-      }
-
-      await addDoc(collection(db, 'contact_us'), {
-        name: fd.get('name'),
-        email: fd.get('email'),
-        message: fd.get('message'),
-        createdAt: serverTimestamp(),
-        userAgent: navigator.userAgent
-      });
-
-      tip.textContent = '✅ 已成功送出，感謝！';
-      form.reset();
-    } catch (err) {
-      console.error('提交失敗：', err);
-      // 顯示更明確的錯誤，幫助你排查
-      if (String(err).includes('permission') || String(err.code).includes('permission')) {
-        tip.textContent = '❌ 權限被拒。請確認 Firestore 規則已「發佈」且 Anonymous 已啟用。';
-      } else {
-        tip.textContent = '❌ 送出失敗，請稍後再試或改用右側 Gmail 按鈕。';
-      }
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 </html>
